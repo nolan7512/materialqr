@@ -8,7 +8,7 @@ export async function getAllMaterialQR() {
 
 
 export async function getMaterialQRById(id) {
-  const [rows] = await pool.query('SELECT * FROM MaterialQR WHERE ID = ?', [id]);
+  const [rows] = await pool.query('SELECT * FROM MaterialQR WHERE id = ?', [id]);
   return rows.length ? rows[0] : null;
 }
 

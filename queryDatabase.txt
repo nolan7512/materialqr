@@ -19,19 +19,20 @@ mkcert 10.30.3.40         # IP của bạn
 # hoặc
 mkcert localhost
 
-CREATE TABLE IF NOT EXISTS lace_materials (
+CREATE TABLE IF NOT EXISTS MaterialQR (
+    id INT AUTO_INCREMENT PRIMARY KEY,
     Material_Name VARCHAR(255),
     Supplier_Name VARCHAR(255),
     Supplier_Material_Name VARCHAR(255),
     Material_Name_By_Supplier VARCHAR(255),
-    Ref_num VARCHAR(50) PRIMARY KEY,
+    Ref_num VARCHAR(50),
     Concept_Brief_ID VARCHAR(100),
     MtlSupp_Lifecycle_State VARCHAR(100),
     Mtl_Lifecycle_State VARCHAR(100),
     Abrasion VARCHAR(100),
     AnimalType VARCHAR(100),
     Skin_Size VARCHAR(100),
-    \`QC%\` VARCHAR(20),
+    QC_percent VARCHAR(20),
     Apperance VARCHAR(255),
     Backside_Coating_Composition VARCHAR(255),
     Backside_Coating_Technology VARCHAR(255),
@@ -65,7 +66,7 @@ CREATE TABLE IF NOT EXISTS lace_materials (
     DateChanged_MaterialSupplier DATETIME,
     DateCreated_Material DATETIME,
     DateCreated_MaterialSupplier DATETIME,
-    \`Density (in g/cm³)\` VARCHAR(50),
+    Density_g_per_cm3 VARCHAR(50),
     Density_Warp VARCHAR(50),
     Density_Weft VARCHAR(50),
     Developer_FirstName VARCHAR(100),
@@ -96,7 +97,7 @@ CREATE TABLE IF NOT EXISTS lace_materials (
     Layer_1_Weight DECIMAL(10, 5),
     LAYERS VARCHAR(10),
     Leadtime INT,
-    \`Speed Leadtime\` INT,
+    Speed_Leadtime INT,
     Leather_Type VARCHAR(100),
     Local_Sourcing_Allowed VARCHAR(10),
     Management_Model VARCHAR(100),
@@ -154,14 +155,23 @@ CREATE TABLE IF NOT EXISTS lace_materials (
     Width VARCHAR(50),
     Width_UoM VARCHAR(50),
     VR VARCHAR(20),
-    \`Reference Material\` VARCHAR(100),
+    Reference_Material VARCHAR(100),
     Discontinued VARCHAR(10),
-    \`Discontinued Remark\` TEXT,
+    Discontinued_Remark TEXT,
     Vegan VARCHAR(5),
-    \`Pre-Coloration Process\` VARCHAR(100),
-    \`Coloration Technology\` VARCHAR(100),
-    \`Post-Coloration Process\` VARCHAR(100),
-    \`Calculation Type\` VARCHAR(50),
+    Pre_Coloration_Process VARCHAR(100),
+    Coloration_Technology VARCHAR(100),
+    Post_Coloration_Process VARCHAR(100),
+    Calculation_Type VARCHAR(50),
     Resilience VARCHAR(100),
-    \`APH Library's code\` VARCHAR(50)
+    APH_Library_Code VARCHAR(50)
 );
+
+
+INSERT INTO MaterialQR (Material_Name, Supplier_Name, Ref_num, Concept_Brief_ID, Mtl_Lifecycle_State, Standard_Price, Currency, Country)
+VALUES 
+('Leather A', 'Supplier X', 'REF-001', 'CBR-1001', 'Active', 12.5000, 'USD', 'Italy'),
+('Synthetic B', 'Supplier Y', 'REF-002', 'CBR-1002', 'Development', 9.7500, 'EUR', 'Germany'),
+('Textile C', 'Supplier Z', 'REF-003', 'CBR-1003', 'Discontinued', 7.3200, 'USD', 'Vietnam'),
+('Leather D', 'Supplier X', 'REF-004', 'CBR-1004', 'Active', 15.0000, 'USD', 'Spain'),
+('Mesh E', 'Supplier W', 'REF-005', 'CBR-1005', 'Testing', 5.8900, 'CNY', 'China');

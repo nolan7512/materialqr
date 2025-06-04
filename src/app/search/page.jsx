@@ -38,9 +38,6 @@ export default function SearchPage() {
         data.filter(
           (item) =>
             item.Material_Name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            item.Supplier_Name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            item.Supplier_Material_Name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            item.Material_Name_By_Supplier?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             item.Ref_num?.toLowerCase().includes(searchTerm.toLowerCase())
         )
       );
@@ -85,8 +82,8 @@ export default function SearchPage() {
             <tbody>
               {filteredData.length > 0 ? (
                 filteredData.map((item) => (
-                  <tr key={item.ID}>
-                    <td className="border border-gray-300 p-2">{item.ID}</td>
+                  <tr key={item.id}>
+                    <td className="border border-gray-300 p-2">{item.id}</td>
                     <td className="border border-gray-300 p-2">{item.Material_Name}</td>
                     <td className="border border-gray-300 p-2">{item.Supplier_Name}</td>
                     <td className="border border-gray-300 p-2">{item.Supplier_Material_Name}</td>

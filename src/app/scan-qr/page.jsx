@@ -16,6 +16,8 @@ export default function ScanQRPage() {
   const scannerRef = useRef(null);
   const router = useRouter();
   const fileInputRef = useRef(null);
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [isIOS, setIsIOS] = useState(false);
 
   const [showModal, setShowModal] = useState(false);
   useEffect(() => {
@@ -34,156 +36,8 @@ export default function ScanQRPage() {
         try {
           setResult(decodedText);
           setIsScanning(false);
-          setMaterial({
-            "Image_URL": "apache-logo.png", // Thay thế bằng URL hình ảnh thực tế
-            "Material_Name": "40044559 Lace & lace tip Braided,Plastic injection",
-            "Supplier_Name": "CHEN TAI",
-            "Supplier_Material_Name": "CTV S 0511",
-            "Material_Name_By_Supplier": "CTV S 0511",
-            "Ref_num": "40044559",
-            "Concept_Brief_ID": "",
-            "MtlSupp_Lifecycle_State": "Limited Release",
-            "Mtl_Lifecycle_State": "Limited Release",
-            "Abrasion": "",
-            "AnimalType": "",
-            "Skin_Size": "",
-            "QC%": "",
-            "Apperance": "",
-            "Backside_Coating_Composition": "",
-            "Backside_Coating_Technology": "",
-            "Benchmark_Supplier": "Y",
-            "Branding_General": "",
-            "Business_Requestor": "Cam, Hong",
-            "Caution_Code": "",
-            "Chemical": "",
-            "Classification": "FINISHED COMPONENT//CLOSURE//LACE TYPE//Lace",
-            "Coating": "",
-            "Coating_Layer_1_Composition": "",
-            "Coating_Layer_1_Location": "",
-            "Coating_Layer_1_Technology": "",
-            "Coating_Layer_2_Composition": "",
-            "Coating_Layer_2_Location": "",
-            "Coating_Layer_2_Technology": "",
-            "Coating_Thickness": "",
-            "Color_Approval_Required": "NO",
-            "Comparison_Price": "0.2256",
-            "Comparison_UoM_Classification": "6MM/M/PAIR",
-            "Composition": "",
-            "Composition_Lace_Tip": "ACETATE",
-            "Construction": "",
-            "Construction_Lace": "Round without core",
-            "Construction_Lace_Tip": "Open end lace tip",
-            "Country": "TAIWAN",
-            "CrustID": "",
-            "Currency": "USD",
-            "Customs_Remark": "",
-            "DateChanged_Material": "2025-05-16 03:23:44.0",
-            "DateChanged_MaterialSupplier": "2025-05-16 03:23:44.0",
-            "DateCreated_Material": "2017-01-04 00:07:27.0",
-            "DateCreated_MaterialSupplier": "2017-01-04 00:07:27.0",
-            "Density (in g/cm³)": "",
-            "Density_Warp": "",
-            "Density_Weft": "",
-            "Developer_FirstName": "Hong",
-            "Developer_LastName": "Cam",
-            "Developer_Location": "Herzo",
-            "Development_Type": "Modified",
-            "Dyeing_Process": "",
-            "Effects": "",
-            "Emboss": "",
-            "End_Season": "",
-            "EPM_Rating": "Not available",
-            "Exclusive_To": "",
-            "Execution": "",
-            "Family_ID": "19984",
-            "Fiber_Content_Percentage": "",
-            "Fiber_Type": "",
-            "Finishing_Lace": "",
-            "Finishing_Lace_Tip": "",
-            "First_Comment": "PDM Import",
-            "First_Quote_Price": "7777",
-            "First_Season": "Fall/Winter 2018",
-            "Flexual_Modulus": "",
-            "Friends_ID": "",
-            "Gauge": "",
-            "Hardness": "",
-            "Laboratory": "LAB OC VIETNAM/LYV",
-            "Lace_Composition": "100% COTTON-BCI",
-            "Layer_1_Weight": "8.79265",
-            "LAYERS": "1",
-            "Leadtime": "21",
-            "Speed Leadtime": "14",
-            "Leather_Type": "",
-            "Local_Sourcing_Allowed": "N",
-            "Management_Model": "Dedicated",
-            "Marking": "",
-            "Material_Remarks": "",
-            "Material_Type_Level_1": "Finished Component",
-            "Material_Type_Level_2": "Closure",
-            "Material_Type_Level_3": "Lace & lace tip",
-            "Metric_Number": "",
-            "Min_Qty_Color": "",
-            "Min_Qty_Sample": "",
-            "Model_Numbers": "LLC92,NIM73,NJJ35,NJJ39,NJJ51,NJJ52,NJK56,NKA03,NKN88,NMP32,NNT02,NNT89,NRC28,NRC31,NRC34,NRY17,NSC61,OMT91,OMV17,OMV95,ONV08,OOD75,OOF33,OON51,OOP18,OOP62,OOQ40,OOQ41,OOR63,OOT31,OPF47",
-            "Molecular_Structure": "",
-            "Oil_Content": "",
-            "Originating_Group": "adidas Footwear",
-            "Out_Dim_Width": "8",
-            "Parent_ID": "",
-            "PR_Type": "None",
-            "Prod_Location": "",
-            "Production_Location": "Taiwan, Vietnam",
-            "Technical_Function": "",
-            "Real_T2_Supplier": "",
-            "Reason_For_Friendship": "",
-            "Reason_For_Uniqueness": "",
-            "Requestor_FirstName": "Hong",
-            "Requestor_LastName": "Cam",
-            "RP": "",
-            "Sample_Leadtime": "10",
-            "Softness": "",
-            "Softness_Ring": "",
-            "Standard_Price": "0.2256",
-            "Stretch_A_In_Percent": "",
-            "Stretch_B_In_Percent": "",
-            "Supplier_Material_ID": "23714681",
-            "Supplier_Remark": "1.  CTV-S1664 is made by 100% cotton which is natural fiber so it’s weak on Colorfastness and UV tests for bright and dark color also it’s poor on physical property such like tensile, abrasion.\n2.  If dyeing different lot, the color will have difference due to the natural material.\n3.  Because of the structure of the material, the width tolerance is ±1 mm.\n4.  The color matching rate for cotton is about 70%-80%. Cotton is not suitable for dyeing neon color. The color matching rate is 50%.\n",
-            "Supplier_UoM": "PAIR",
-            "Tannage_Type": "",
-            "Technology": "",
-            "Technology_Lace": "Braided",
-            "Technology_Lace_Tip": "Plastic injection",
-            "Terms_of_Delivery": "FOB (freight on board)",
-            "Testing_Group": "Base Material",
-            "Testing_Group_ID": "40044559",
-            "Textile_pattern_shape": "",
-            "Thickness_in_mm": "",
-            "Thickness_tolerance": "",
-            "Toolboxes": "SS2027 Seasonal, FW2026 Seasonal, FW2026 Foundation, SS2026 Seasonal, SS2026 Foundation, FW2025 Seasonal, SS2025 Seasonal, FW2024 Seasonal, FW2024 Foundation, SS2024 Seasonal, FW2023 Seasonal, SS2023 Seasonal, FW2022 Seasonal, SS2022 Seasonal, FW2021 Seasonal, FW2021 Foundation, SS2021 Seasonal, SS2021 Foundation, FW2020 Seasonal, FW2020 Foundation, SS2020 Seasonal, FW2019 Seasonal, SS2019 Seasonal, FW2018 Seasonal, FW2017 Seasonal, SS2017 Seasonal",
-            "Total_Thickness": "",
-            "Total_Weight": "8.79265",
-            "Treatment": "",
-            "User_Last_Changed_Material": "mlmInternalRestCall",
-            "VENDOR_CD": "Z87001",
-            "Virtual_Reference_ID": "",
-            "Weight_UoM": "G/M(PR)",
-            "Width": "",
-            "Width_UoM": "",
-            "VR": "3D",
-            "Reference Material": "",
-            "Discontinued": "",
-            "Discontinued Remark": "",
-            "Vegan": "Y",
-            "Pre-Coloration Process": "No Pre-Treatment",
-            "Coloration Technology": "Piece Dye",
-            "Post-Coloration Process": "No Post-Treatment",
-            "Calculation Type": "Length",
-            "Resilience": "",
-            "APH Library's code": "CK-11"
-          }); // demo key-value
-          setShowModal(true);
           // Bỏ comment khi API sẵn sàng
-          /*
+
           const res = await fetch(`/api/materialqr/${decodedText}`);
           if (res.ok) {
             const data = await res.json();
@@ -191,9 +45,8 @@ export default function ScanQRPage() {
             setShowModal(true);
           } else {
             throw new Error('Không tìm thấy dữ liệu');
-            setShowModal(false);
           }
-          */
+
         } catch (err) {
           setError(err.message || 'Lỗi khi xử lý mã QR');
           setMaterial(null);
@@ -212,6 +65,31 @@ export default function ScanQRPage() {
         });
       }
     };
+  }, []);
+
+
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker
+        .register('/sw.js')
+        .then(() => console.log('Service Worker registered'))
+        .catch((err) => console.error('Service Worker registration failed:', err));
+    }
+  }, []);
+
+  useEffect(() => {
+    const handler = (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+    window.addEventListener('beforeinstallprompt', handler);
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+
+  useEffect(() => {
+    // Kiểm tra iOS
+    const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    setIsIOS(isIOSDevice);
   }, []);
 
   const handleFileUpload = async (event) => {
@@ -257,156 +135,8 @@ export default function ScanQRPage() {
       URL.revokeObjectURL(url);
 
 
-      setMaterial({
-        "Image_URL":"apache-logo.png",
-        "Material_Name": "40044559 Lace & lace tip Braided,Plastic injection",
-        "Supplier_Name": "CHEN TAI",
-        "Supplier_Material_Name": "CTV S 0511",
-        "Material_Name_By_Supplier": "CTV S 0511",
-        "Ref_num": "40044559",
-        "Concept_Brief_ID": "",
-        "MtlSupp_Lifecycle_State": "Limited Release",
-        "Mtl_Lifecycle_State": "Limited Release",
-        "Abrasion": "",
-        "AnimalType": "",
-        "Skin_Size": "",
-        "QC%": "",
-        "Apperance": "",
-        "Backside_Coating_Composition": "",
-        "Backside_Coating_Technology": "",
-        "Benchmark_Supplier": "Y",
-        "Branding_General": "",
-        "Business_Requestor": "Cam, Hong",
-        "Caution_Code": "",
-        "Chemical": "",
-        "Classification": "FINISHED COMPONENT//CLOSURE//LACE TYPE//Lace",
-        "Coating": "",
-        "Coating_Layer_1_Composition": "",
-        "Coating_Layer_1_Location": "",
-        "Coating_Layer_1_Technology": "",
-        "Coating_Layer_2_Composition": "",
-        "Coating_Layer_2_Location": "",
-        "Coating_Layer_2_Technology": "",
-        "Coating_Thickness": "",
-        "Color_Approval_Required": "NO",
-        "Comparison_Price": "0.2256",
-        "Comparison_UoM_Classification": "6MM/M/PAIR",
-        "Composition": "",
-        "Composition_Lace_Tip": "ACETATE",
-        "Construction": "",
-        "Construction_Lace": "Round without core",
-        "Construction_Lace_Tip": "Open end lace tip",
-        "Country": "TAIWAN",
-        "CrustID": "",
-        "Currency": "USD",
-        "Customs_Remark": "",
-        "DateChanged_Material": "2025-05-16 03:23:44.0",
-        "DateChanged_MaterialSupplier": "2025-05-16 03:23:44.0",
-        "DateCreated_Material": "2017-01-04 00:07:27.0",
-        "DateCreated_MaterialSupplier": "2017-01-04 00:07:27.0",
-        "Density (in g/cm³)": "",
-        "Density_Warp": "",
-        "Density_Weft": "",
-        "Developer_FirstName": "Hong",
-        "Developer_LastName": "Cam",
-        "Developer_Location": "Herzo",
-        "Development_Type": "Modified",
-        "Dyeing_Process": "",
-        "Effects": "",
-        "Emboss": "",
-        "End_Season": "",
-        "EPM_Rating": "Not available",
-        "Exclusive_To": "",
-        "Execution": "",
-        "Family_ID": "19984",
-        "Fiber_Content_Percentage": "",
-        "Fiber_Type": "",
-        "Finishing_Lace": "",
-        "Finishing_Lace_Tip": "",
-        "First_Comment": "PDM Import",
-        "First_Quote_Price": "7777",
-        "First_Season": "Fall/Winter 2018",
-        "Flexual_Modulus": "",
-        "Friends_ID": "",
-        "Gauge": "",
-        "Hardness": "",
-        "Laboratory": "LAB OC VIETNAM/LYV",
-        "Lace_Composition": "100% COTTON-BCI",
-        "Layer_1_Weight": "8.79265",
-        "LAYERS": "1",
-        "Leadtime": "21",
-        "Speed Leadtime": "14",
-        "Leather_Type": "",
-        "Local_Sourcing_Allowed": "N",
-        "Management_Model": "Dedicated",
-        "Marking": "",
-        "Material_Remarks": "",
-        "Material_Type_Level_1": "Finished Component",
-        "Material_Type_Level_2": "Closure",
-        "Material_Type_Level_3": "Lace & lace tip",
-        "Metric_Number": "",
-        "Min_Qty_Color": "",
-        "Min_Qty_Sample": "",
-        "Model_Numbers": "LLC92,NIM73,NJJ35,NJJ39,NJJ51,NJJ52,NJK56,NKA03,NKN88,NMP32,NNT02,NNT89,NRC28,NRC31,NRC34,NRY17,NSC61,OMT91,OMV17,OMV95,ONV08,OOD75,OOF33,OON51,OOP18,OOP62,OOQ40,OOQ41,OOR63,OOT31,OPF47",
-        "Molecular_Structure": "",
-        "Oil_Content": "",
-        "Originating_Group": "adidas Footwear",
-        "Out_Dim_Width": "8",
-        "Parent_ID": "",
-        "PR_Type": "None",
-        "Prod_Location": "",
-        "Production_Location": "Taiwan, Vietnam",
-        "Technical_Function": "",
-        "Real_T2_Supplier": "",
-        "Reason_For_Friendship": "",
-        "Reason_For_Uniqueness": "",
-        "Requestor_FirstName": "Hong",
-        "Requestor_LastName": "Cam",
-        "RP": "",
-        "Sample_Leadtime": "10",
-        "Softness": "",
-        "Softness_Ring": "",
-        "Standard_Price": "0.2256",
-        "Stretch_A_In_Percent": "",
-        "Stretch_B_In_Percent": "",
-        "Supplier_Material_ID": "23714681",
-        "Supplier_Remark": "1.  CTV-S1664 is made by 100% cotton which is natural fiber so it’s weak on Colorfastness and UV tests for bright and dark color also it’s poor on physical property such like tensile, abrasion.\n2.  If dyeing different lot, the color will have difference due to the natural material.\n3.  Because of the structure of the material, the width tolerance is ±1 mm.\n4.  The color matching rate for cotton is about 70%-80%. Cotton is not suitable for dyeing neon color. The color matching rate is 50%.\n",
-        "Supplier_UoM": "PAIR",
-        "Tannage_Type": "",
-        "Technology": "",
-        "Technology_Lace": "Braided",
-        "Technology_Lace_Tip": "Plastic injection",
-        "Terms_of_Delivery": "FOB (freight on board)",
-        "Testing_Group": "Base Material",
-        "Testing_Group_ID": "40044559",
-        "Textile_pattern_shape": "",
-        "Thickness_in_mm": "",
-        "Thickness_tolerance": "",
-        "Toolboxes": "SS2027 Seasonal, FW2026 Seasonal, FW2026 Foundation, SS2026 Seasonal, SS2026 Foundation, FW2025 Seasonal, SS2025 Seasonal, FW2024 Seasonal, FW2024 Foundation, SS2024 Seasonal, FW2023 Seasonal, SS2023 Seasonal, FW2022 Seasonal, SS2022 Seasonal, FW2021 Seasonal, FW2021 Foundation, SS2021 Seasonal, SS2021 Foundation, FW2020 Seasonal, FW2020 Foundation, SS2020 Seasonal, FW2019 Seasonal, SS2019 Seasonal, FW2018 Seasonal, FW2017 Seasonal, SS2017 Seasonal",
-        "Total_Thickness": "",
-        "Total_Weight": "8.79265",
-        "Treatment": "",
-        "User_Last_Changed_Material": "mlmInternalRestCall",
-        "VENDOR_CD": "Z87001",
-        "Virtual_Reference_ID": "",
-        "Weight_UoM": "G/M(PR)",
-        "Width": "",
-        "Width_UoM": "",
-        "VR": "3D",
-        "Reference Material": "",
-        "Discontinued": "",
-        "Discontinued Remark": "",
-        "Vegan": "Y",
-        "Pre-Coloration Process": "No Pre-Treatment",
-        "Coloration Technology": "Piece Dye",
-        "Post-Coloration Process": "No Post-Treatment",
-        "Calculation Type": "Length",
-        "Resilience": "",
-        "APH Library's code": "CK-11"
-      }); // demo key-value
-      setShowModal(true);
-      // Bỏ comment khi API sẵn sàng
-      /*
+
+      // Bỏ comment khi API sẵn sàng   
       const res = await fetch(`/api/materialqr/${code.data}`);
       if (res.ok) {
         const data = await res.json();
@@ -415,7 +145,6 @@ export default function ScanQRPage() {
       } else {
         throw new Error('Không tìm thấy dữ liệu');
       }
-      */
     } catch (err) {
       setError('Lỗi khi đọc mã QR từ ảnh: ' + err.message);
       setMaterial(null);
@@ -424,6 +153,16 @@ export default function ScanQRPage() {
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
+    }
+  };
+  const handleInstallClick = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        console.log('PWA installed');
+      }
+      setDeferredPrompt(null);
     }
   };
   return (
@@ -435,6 +174,19 @@ export default function ScanQRPage() {
         >
           Quay lại
         </button>
+        {deferredPrompt && !isIOS && (
+          <button
+            className="flex bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 items-center gap-2 mt-2"
+            onClick={handleInstallClick}
+          >
+            Cài đặt ứng dụng
+          </button>
+        )}
+        {isIOS && (
+          <p className="text-sm text-gray-600 mt-2">
+            Để cài đặt ứng dụng trên iOS, vui lòng mở trang này trong <strong>Safari</strong>, nhấn nút <strong>Chia sẻ</strong> (hình vuông với mũi tên), và chọn <strong>Thêm vào Màn hình chính</strong>.
+          </p>
+        )}
       </div>
       <h1 className="text-lg font-bold mb-4 text-center">Quét mã QR Nguyên Vật Liệu</h1>
 
