@@ -4,6 +4,20 @@ npm install @blackbox-vision/react-qr-reader
 mở bằng gitbash
 openssl req -x509 -newkey rsa:4096 -nodes -out cert.pem -keyout key.pem -days 360
 openssl x509 -outform der -in cert.pem -out cert.cer
+openssl x509 -outform pem -in 10.30.3.40.pem -out 10.30.3.40.cer
+
+# Cài mkcert
+brew install mkcert       # macOS
+choco install mkcert      # Windows
+sudo apt install mkcert   # Linux (hoặc dùng Snap)
+
+# Tạo CA tin cậy cục bộ
+mkcert -install
+
+# Tạo chứng chỉ cho local IP hoặc domain
+mkcert 10.30.3.40         # IP của bạn
+# hoặc
+mkcert localhost
 
 CREATE TABLE IF NOT EXISTS lace_materials (
     Material_Name VARCHAR(255),

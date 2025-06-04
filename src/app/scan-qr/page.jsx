@@ -470,7 +470,7 @@ export default function ScanQRPage() {
               3. Làm mới trang để sử dụng camera.
             </div>
             <a
-              href="/certs/cert.cer"
+              href="/certs/10.30.3.40.cer"
               download="cert.cer"
               className="mt-2 inline-block bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
             >

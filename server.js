@@ -7,9 +7,14 @@ const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev, hostname: '10.30.3.40', port: 3000 });
 const handle = app.getRequestHandler();
 
+// const httpsOptions = {
+//   key: fs.readFileSync('./certs/key.pem'),
+//   cert: fs.readFileSync('./certs/cert.pem'),
+// };
+
 const httpsOptions = {
-  key: fs.readFileSync('./certs/key.pem'),
-  cert: fs.readFileSync('./certs/cert.pem'),
+  key: fs.readFileSync('./certs/10.30.3.40-key.pem'),
+  cert: fs.readFileSync('./certs/10.30.3.40.pem'),
 };
 
 app.prepare().then(() => {
