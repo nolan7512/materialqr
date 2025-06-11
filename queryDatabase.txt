@@ -19,6 +19,9 @@ mkcert 10.30.3.40         # IP của bạn
 # hoặc
 mkcert localhost
 
+
+rmdir /s /q .next
+
 CREATE TABLE IF NOT EXISTS MaterialQR (
     id INT AUTO_INCREMENT PRIMARY KEY,
     Material_Name VARCHAR(255),

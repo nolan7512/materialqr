@@ -20,6 +20,16 @@ export default function ScanQRPage() {
   const [isIOS, setIsIOS] = useState(false);
 
   const [showModal, setShowModal] = useState(false);
+
+  //   useEffect(() => {
+  //   if ('serviceWorker' in navigator) {
+  //     navigator.serviceWorker
+  //       .register('/sw.js')
+  //       .then(() => console.log('Service Worker registered'))
+  //       .catch((err) => console.error('Service Worker registration failed:', err));
+  //   }
+  // }, []);
+
   useEffect(() => {
     setIsScanning(true);
     const scanner = new Html5QrcodeScanner('qr-reader', {
@@ -68,14 +78,7 @@ export default function ScanQRPage() {
   }, []);
 
 
-  useEffect(() => {
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker
-        .register('/sw.js')
-        .then(() => console.log('Service Worker registered'))
-        .catch((err) => console.error('Service Worker registration failed:', err));
-    }
-  }, []);
+
 
   useEffect(() => {
     const handler = (e) => {
@@ -170,11 +173,11 @@ export default function ScanQRPage() {
       <div className="py-2">
         <button
           className="flex bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 items-center gap-2 "
-          onClick={() => router.back()}
+          onClick={() => router.push("/")}
         >
           Quay lại
         </button>
-        {deferredPrompt && !isIOS && (
+        {/* {deferredPrompt && !isIOS && (
           <button
             className="flex bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 items-center gap-2 mt-2"
             onClick={handleInstallClick}
@@ -186,7 +189,7 @@ export default function ScanQRPage() {
           <p className="text-sm text-gray-600 mt-2">
             Để cài đặt ứng dụng trên iOS, vui lòng mở trang này trong <strong>Safari</strong>, nhấn nút <strong>Chia sẻ</strong> (hình vuông với mũi tên), và chọn <strong>Thêm vào Màn hình chính</strong>.
           </p>
-        )}
+        )} */}
       </div>
       <h1 className="text-lg font-bold mb-4 text-center">Quét mã QR Nguyên Vật Liệu</h1>
 
