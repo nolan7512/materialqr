@@ -172,7 +172,7 @@ export default function ScanQRPage() {
     <div className="p-4 max-w-2xl mx-auto">
       <div className="py-2">
         <button
-          className="flex bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 items-center gap-2 "
+          className="flex px-4 py-2 rounded items-center gap-2 bg-[var(--button-bg)] text-[var(--button-text)] hover:bg-[var(--button-hover-bg)]"
           onClick={() => router.push("/")}
         >
           Quay lại
@@ -194,7 +194,7 @@ export default function ScanQRPage() {
       <h1 className="text-lg font-bold mb-4 text-center">Quét mã QR Nguyên Vật Liệu</h1>
 
       <div className="mb-6">
-        <p className="text-sm text-gray-600 mb-2">
+        <p className="text-sm text-[var(--font-color)] mb-2">
           Để sử dụng camera mà không có cảnh báo bảo mật, bạn cần cài đặt chứng chỉ.
           <button
             onClick={() => setShowInstructions(!showInstructions)}
@@ -204,7 +204,7 @@ export default function ScanQRPage() {
           </button>
         </p>
         {showInstructions && (
-          <div className="bg-gray-100 p-4 rounded-lg mb-4">
+          <div className="bg-[var(--border-color)] p-4 rounded-lg mb-4 text-[var(--font-color)]">
             <div className="text-sm">
               1. Nhấn nút dưới để tải chứng chỉ (<code>cert.cer</code>).<br />
               2. Cài đặt chứng chỉ:
@@ -235,7 +235,7 @@ export default function ScanQRPage() {
         )}
       </div>
       <div className="mb-4">
-        <label className="block text-sm text-gray-600 mb-2">
+        <label className="block text-sm text-[var(--font-color)] mb-2">
           Cấp quyền Camera Hoặc tải ảnh QR lên ở đây:
           <input
             type="file"
@@ -247,7 +247,7 @@ export default function ScanQRPage() {
         </label>
       </div>
       {isScanning && (
-        <p className="text-center text-gray-700 animate-pulse">Bấm "Request Carema Permissions" hoặc "Start Scanning" phía dưới để bắt đầu...</p>
+        <p className="text-center text-[var(--font-color)] animate-pulse">Bấm "Request Carema Permissions" hoặc "Start Scanning" phía dưới để bắt đầu...</p>
       )}
 
       <div id="qr-reader" className=" max-w-full mx-auto mb-6 border rounded-lg shadow-md" />

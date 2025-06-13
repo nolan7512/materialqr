@@ -8,8 +8,10 @@ import {
 
 export async function POST(req) {
     const body = await req.json();
+    const { data } = body;
+
     try {
-        await addMaterialQR(body);
+        await addMaterialQR(data); // `data` là một mảng
         return new Response(JSON.stringify({ success: true }), { status: 200 });
     } catch (err) {
         return new Response(JSON.stringify({ error: err.message }), { status: 500 });
@@ -32,9 +34,9 @@ export async function DELETE(req) {
 
 export async function GET() {
     try {
-      const data = await getAllMaterialQR();
-      return new Response(JSON.stringify(data), { status: 200 });
+        const data = await getAllMaterialQR();
+        return new Response(JSON.stringify(data), { status: 200 });
     } catch (err) {
-      return new Response(JSON.stringify({ error: err.message }), { status: 500 });
+        return new Response(JSON.stringify({ error: err.message }), { status: 500 });
     }
-  }
+}

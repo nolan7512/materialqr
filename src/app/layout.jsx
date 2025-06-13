@@ -25,7 +25,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="light">
+    <html lang="vi" className="light">
       <head>
         <link rel="icon" href="/icons/favicon.ico" />
         <link rel="manifest" href="/manifest.json" />
@@ -39,7 +39,7 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <header>
-          <div className="rounded-lg shadow-md py-2">
+          <div className="rounded-lg shadow-md py-2 w-full max-w-full">
             <div className="flex items-center  w-full mb-6">
               {/* Logo bên trái */}
               <img

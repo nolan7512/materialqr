@@ -1,31 +1,3 @@
-
-npm install @blackbox-vision/react-qr-reader
-
-mở bằng gitbash
-openssl req -x509 -newkey rsa:4096 -nodes -out cert.pem -keyout key.pem -days 360
-openssl x509 -outform der -in cert.pem -out cert.cer
-openssl x509 -outform pem -in 10.30.3.40.pem -out 10.30.3.40.cer
-
-# Cài mkcert
-brew install mkcert       # macOS
-choco install mkcert      # Windows
-sudo apt install mkcert   # Linux (hoặc dùng Snap)
-
-# Tạo CA tin cậy cục bộ
-mkcert -install
-
-# Tạo chứng chỉ cho local IP hoặc domain
-mkcert 10.30.3.40         # IP của bạn
-# hoặc
-mkcert localhost
-
-
-rmdir /s /q .next
-
-
-
-
-
 CREATE TABLE IF NOT EXISTS MaterialQR (
   id INT AUTO_INCREMENT PRIMARY KEY,
   Material_Name TEXT,
@@ -171,22 +143,6 @@ CREATE TABLE IF NOT EXISTS MaterialQR (
   Post_Coloration_Process VARCHAR(100),
   Calculation_Type VARCHAR(100),
   Resilience VARCHAR(100),
-  APH_Library_Code VARCHAR(100)
+  APH_Library_Code VARCHAR(100),
+  Season VARCHAR(50)
 );
-
-
-
-
-
-
-
-
-
-
-INSERT INTO MaterialQR (Material_Name, Supplier_Name, Ref_num, Concept_Brief_ID, Mtl_Lifecycle_State, Standard_Price, Currency, Country)
-VALUES 
-('Leather A', 'Supplier X', 'REF-001', 'CBR-1001', 'Active', 12.5000, 'USD', 'Italy'),
-('Synthetic B', 'Supplier Y', 'REF-002', 'CBR-1002', 'Development', 9.7500, 'EUR', 'Germany'),
-('Textile C', 'Supplier Z', 'REF-003', 'CBR-1003', 'Discontinued', 7.3100, 'USD', 'Vietnam'),
-('Leather D', 'Supplier X', 'REF-004', 'CBR-1004', 'Active', 15.0000, 'USD', 'Spain'),
-('Mesh E', 'Supplier W', 'REF-005', 'CBR-1005', 'Testing', 5.8900, 'CNY', 'China');

@@ -5,21 +5,20 @@ import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 export default function MaterialInfoModal({ isOpen, onClose, data }) {
     return (
         <Dialog open={isOpen} onClose={onClose} className="fixed z-50 inset-0 overflow-y-auto">
-
             <div className="flex items-center justify-center min-h-screen px-4">
                 {/* Overlay */}
-                {/* ❌ Nút X cố định ở góc trên trái */}
+                <div className="fixed inset-0 bg-black opacity-30" aria-hidden="true" />
+
+                {/* ❌ Nút X */}
                 <button
                     onClick={onClose}
-                    className="absolute top-4 right-4 bg-gray-600 text-white w-10 h-10 rounded-md flex items-center justify-center hover:bg-gray-800 z-10"
+                    className="absolute top-4 right-4 bg-[var(--button-bg)] text-[var(--button-text)] w-10 h-10 rounded-md flex items-center justify-center hover:bg-[var(--button-hover-bg)] z-10"
                 >
                     X
                 </button>
-                <div className="fixed inset-0 bg-black opacity-30" aria-hidden="true" />
 
-                <DialogPanel className="relative bg-white rounded-lg max-h-[80vh] w-full max-w-5xl overflow-y-auto p-6 shadow-xl">
-
-                    <DialogTitle className="flex text-3xl font-bold mb-4 items-center justify-center">
+                <DialogPanel className="relative rounded-lg max-h-[80vh] w-full max-w-5xl overflow-y-auto p-6 shadow-xl bg-[var(--background)] text-[var(--font-color)]">
+                    <DialogTitle className="flex text-3xl font-bold mb-4 items-center justify-center text-[var(--accent-color)]">
                         Thông tin vật liệu
                     </DialogTitle>
 
@@ -36,23 +35,26 @@ export default function MaterialInfoModal({ isOpen, onClose, data }) {
 
                     {/* Thông tin chi tiết */}
                     <div className="space-y-2">
-                        {Object.entries(data).map(([key, value]) => {
-                            // Bỏ qua Image_URL khỏi phần danh sách thông tin
-                            if (key === 'Image_URL') return null;
-                            return (
-                                <div key={key} className="grid grid-cols-2 gap-4 border-b py-1 text-sm">
-                                    <div className="text-gray-700 font-bold break-words">{key}</div>
-                                    <div className="text-gray-900 break-words">{value?.toString() || '-'}</div>
-                                </div>
-                            );
-                        })}
+                        {data ? (
+                            Object.entries(data).map(([key, value]) => {
+                                if (key === 'Image_URL') return null;
+                                return (
+                                    <div key={key} className="grid grid-cols-2 gap-4 border-b border-[var(--border-color)] py-1 text-sm">
+                                        <div className="font-bold break-words text-[var(--label-color)]">{key}</div>
+                                        <div className="break-words text-[var(--font-color)]">{value?.toString() || '-'}</div>
+                                    </div>
+                                );
+                            })
+                        ) : (
+                            <p className="text-center text-gray-500">Không có dữ liệu để hiển thị</p>
+                        )}
                     </div>
 
                     {/* Nút đóng */}
                     <div className="mt-6 text-right">
                         <button
                             onClick={onClose}
-                            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                            className="bg-[var(--button-bg)] text-[var(--button-text)] px-4 py-2 rounded hover:bg-[var(--button-hover-bg)]"
                         >
                             Đóng
                         </button>
