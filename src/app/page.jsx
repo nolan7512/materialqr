@@ -67,7 +67,7 @@ export default function Home() {
     fetchData();
   }, []);
   const handleUpload = async (event) => {
-    
+
     if (season == "") {
       return alert("Vui lòng nhập season trước khi upload file.");
     }
@@ -103,7 +103,7 @@ export default function Home() {
         Ref_num: normalizeString(row.Ref_num),
         Supplier_Material_Name: normalizeString(row.Supplier_Material_Name),
         Supplier_Material_ID: normalizeString(row.Supplier_Material_ID),
-        Season: normalizeString(row.Season), // Thêm Season nếu có
+        Season: normalizeString(row.Season).toUpperCase()
       }));
 
       const normalizedData = data.map((item) => ({
@@ -111,16 +111,16 @@ export default function Home() {
         Ref_num: normalizeString(item.Ref_num),
         Supplier_Material_Name: normalizeString(item.Supplier_Material_Name),
         Supplier_Material_ID: normalizeString(item.Supplier_Material_ID),
-        Season: normalizeString(item.Season), // Thêm Season nếu có
+        Season: normalizeString(item.Season).toUpperCase(), // 👈 Convert to uppercase
       }));
 
       const duplicates = normalizedResult.filter((row) => {
         return normalizedData.some(
           (item) =>
-            item.Ref_num == row.Ref_num &&
-            item.Supplier_Material_Name == row.Supplier_Material_Name &&
-            item.Supplier_Material_ID == row.Supplier_Material_ID &&
-            item.Season == row.Season
+            item.Ref_num === row.Ref_num &&
+            item.Supplier_Material_Name === row.Supplier_Material_Name &&
+            item.Supplier_Material_ID === row.Supplier_Material_ID &&
+            item.Season === row.Season
         );
       });
       if (duplicates.length > 0) {
@@ -213,9 +213,13 @@ export default function Home() {
           type="text"
           placeholder="Nhập season trước khi upload file"
           className="border p-2 rounded sm:w-1/4 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+          value={season}
           onChange={(e) => {
-            setSeason(e.target.value);
+            const formatted = e.target.value.toUpperCase().replace(/[^A-Z0-9-]/g, '');
+            setSeason(formatted);
           }}
+          title="Chỉ nhập chữ in hoa (A-Z), số (0-9) và dấu gạch ngang (-)"
+          aria-label="Chỉ nhập chữ in hoa (A-Z), số (0-9) và dấu gạch ngang (-)"
         />
       </div>
       {tableData.length > 0 && duplicateRows.length == 0 && (
@@ -248,6 +252,10 @@ export default function Home() {
         type="file"
         accept=".xlsx, .xls"
         ref={fileInputRef}
+        onClick={(e) => {
+          // Reset input để onChange luôn được gọi, kể cả khi file không đổi
+          e.currentTarget.value = null;
+        }}
         onChange={handleUpload}
         className="hidden"
       />
