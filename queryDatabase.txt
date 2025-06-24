@@ -6,16 +6,31 @@ openssl req -x509 -newkey rsa:4096 -nodes -out cert.pem -keyout key.pem -days 36
 openssl x509 -outform der -in cert.pem -out cert.cer
 openssl x509 -outform pem -in 10.30.3.40.pem -out 10.30.3.40.cer
 
+
+# Cai goi choco truoc
+choco --version
+Set-ExecutionPolicy Bypass -Scope Process -Force; `
+[System.Net.ServicePointManager]::SecurityProtocol = `
+    [System.Net.SecurityProtocolType]::Tls12; `
+iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+
+
+
+
 # Cài mkcert
 brew install mkcert       # macOS
 choco install mkcert      # Windows
 sudo apt install mkcert   # Linux (hoặc dùng Snap)
 
-# Tạo CA tin cậy cục bộ
+# Tạo CA tin cậy cục bộs
 mkcert -install
-
+ 
 # Tạo chứng chỉ cho local IP hoặc domain
 mkcert 10.30.3.40         # IP của bạn
+
+# Tao file cai chung Chi
+mkcert -CAROOT
+
 # hoặc
 mkcert localhost
 

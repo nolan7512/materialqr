@@ -103,6 +103,7 @@ export default function Home() {
         Ref_num: normalizeString(row.Ref_num),
         Supplier_Material_Name: normalizeString(row.Supplier_Material_Name),
         Supplier_Material_ID: normalizeString(row.Supplier_Material_ID),
+        Season: normalizeString(row.Season), // Thêm Season nếu có
       }));
 
       const normalizedData = data.map((item) => ({
@@ -116,10 +117,10 @@ export default function Home() {
       const duplicates = normalizedResult.filter((row) => {
         return normalizedData.some(
           (item) =>
-            item.Ref_num === row.Ref_num &&
-            item.Supplier_Material_Name === row.Supplier_Material_Name &&
-            item.Supplier_Material_ID === row.Supplier_Material_ID &&
-            item.Season === row.Season
+            item.Ref_num == row.Ref_num &&
+            item.Supplier_Material_Name == row.Supplier_Material_Name &&
+            item.Supplier_Material_ID == row.Supplier_Material_ID &&
+            item.Season == row.Season
         );
       });
       if (duplicates.length > 0) {
