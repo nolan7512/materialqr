@@ -78,6 +78,7 @@ export default function SearchPage() {
         data.filter(
           (item) =>
             item.Ref_num?.toLowerCase().includes(searchTerm.toLowerCase())
+            || item.Season?.toLowerCase().includes(searchTerm.toLowerCase())
         )
       );
     }
@@ -241,13 +242,13 @@ export default function SearchPage() {
           .label-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+            gap: 15px;
           }
           .label {        
             border: 1px solid #000;
-            padding: 15px;
-            width: 100%;
-            height: 190px;
+            padding: 5px;
+            width: 6.5cm;
+            height: 4.5cm;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
@@ -259,11 +260,11 @@ export default function SearchPage() {
             display: flex;
             justify-content: center;
             align-items: center;
-            padding-bottom: 5px;
+            padding-bottom: 2px;
           }
           table {
             width: 100%;
-            font-size: 8px;
+            font-size: 7px;
             border-collapse: collapse;
           }
           td {
@@ -311,13 +312,16 @@ export default function SearchPage() {
         </button>
       </div>
 
-      <input
-        type="text"
-        placeholder="Tìm kiếm Ref_num..."
-        className="mb-4 px-3 py-2 border rounded w-full max-w-lg"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
+      <div className="pt-2">
+        <input
+          type="text"
+          placeholder="Tìm kiếm theo Ref_num / Season..."
+          className="mb-4 px-3 py-2 border rounded w-full max-w-lg"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
+
 
       {loading ? (
         <p>Đang tải dữ liệu...</p>
@@ -328,7 +332,7 @@ export default function SearchPage() {
               <tr>
                 <th className="border border-[var(--border-color)] bg-[var(--background)]  px-2 py-1 text-left  whitespace-nowrap min-w-[150px] ">
                   <div className="flex items-center justify-center">
-                    <input                    
+                    <input
                       type="checkbox"
                       checked={selectedRows.length === filteredData.length && filteredData.length > 0}
                       onChange={handleSelectAll}
