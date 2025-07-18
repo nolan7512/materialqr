@@ -229,64 +229,65 @@ export default function SearchPage() {
     const printWindow = window.open("", "", "width=1500,height=900,scrollbars=yes");
 
     printWindow.document.write(`
-    <html>
-      <head>
-        <style>
-          body {
-            font-family: sans-serif;
-            padding-top: 20px;
-            padding-bottom: 20px;
-            padding-left: 20px;
-            padding-right: 20px;
-          }
-          .label-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-          }
-          .label {        
-            border: 1px solid #000;
-            padding: 5px;
-            width: 6.5cm;
-            height: 4.5cm;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            page-break-inside: avoid;
-            break-inside: avoid;
-          }
-          .qr {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding-bottom: 2px;
-          }
-          table {
-            width: 100%;
-            font-size: 7px;
-            border-collapse: collapse;
-          }
-          td {
-            padding: 2px 4px;
-            border: 1px solid #000;
-          }
-        </style>
-      </head>
-      <body>
-        <div class="label-grid">${printContents}</div>
-        <script>
-          window.onload = function () {
-            window.print();
-            window.close();
-          }
-        </script>
-      </body>
-    </html>
-  `);
+      <html>
+        <head>
+          <style>
+            @page {
+              size: 6cm 3cm;
+              margin: 0;
+            }
+
+            body {
+              margin-top: 0;
+              font-family: sans-serif;
+            }
+
+            .label {
+              width: 6.0cm;
+              height: 3.0cm;
+              box-sizing: border-box;
+              padding: 0.1cm;
+              display: flex;
+              flex-direction: column;
+              justify-content: space-between;
+              border: 1px solid #000;
+              page-break-after: always;
+            }
+
+            .qr {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              margin-bottom: 0.1cm;
+            }
+
+            table {
+
+              font-size: 6px;
+              border-collapse: collapse;
+            }
+
+            td {
+              padding: 1px 1px;
+              border: 1px solid #000;
+            }
+          </style>
+        </head>
+        <body>
+          ${printContents}
+          <script>
+            window.onload = function () {
+              window.print();
+              window.close();
+            }
+          </script>
+        </body>
+      </html>
+    `);
 
     printWindow.document.close();
   };
+
   return (
     <div className="px-2 py-2  ">
       <div className="py-2 flex gap-4 items-center">
@@ -447,24 +448,21 @@ export default function SearchPage() {
           .map((item, index) => (
             <div key={index} className="label">
               <div className="qr">
-                <QRCodeSVG value={String(item.id)} size={60} />
+                <QRCodeSVG value={String(item.id)} size={35} />
               </div>
-              <table >
+              <table>
                 <tbody>
                   <tr><td><strong>Season</strong></td><td>{item.Season}</td></tr>
-                  <tr><td><strong>Supplier_Name</strong></td><td>{item.Supplier_Name}</td></tr>
-                  <tr><td><strong>Material_Name_By_Supplier</strong></td><td>{item.Material_Name_By_Supplier}</td></tr>
-                  <tr><td><strong>Ref_num</strong></td><td>{item.Ref_num}</td></tr>
+                  <tr><td><strong>Supplier Name</strong></td><td>{item.Supplier_Name}</td></tr>
+                  <tr><td><strong>Material Name By Supplier</strong></td><td>{item.Material_Name_By_Supplier}</td></tr>
+                  <tr><td><strong>MLM</strong></td><td>{item.Ref_num}</td></tr>
                   <tr><td><strong>Classification</strong></td><td>{item.Classification}</td></tr>
                   <tr><td><strong>APH Library's code</strong></td><td>{item.APH_Library_Code}</td></tr>
                 </tbody>
               </table>
             </div>
           ))}
-
       </div>
-
-
     </div >
   );
 }
