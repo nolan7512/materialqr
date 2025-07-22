@@ -215,11 +215,11 @@ export default function Home() {
           className="border p-2 rounded sm:w-1/4 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
           value={season}
           onChange={(e) => {
-            const formatted = e.target.value.toUpperCase().replace(/[^A-Z0-9-]/g, '');
+            const formatted = e.target.value.toUpperCase().replace(/[^A-Z0-9&]/g, '');
             setSeason(formatted);
           }}
-          title="Chỉ nhập chữ in hoa (A-Z), số (0-9) và dấu gạch ngang (-)"
-          aria-label="Chỉ nhập chữ in hoa (A-Z), số (0-9) và dấu gạch ngang (-)"
+          title="Chỉ nhập chữ in hoa (A-Z), số (0-9) và dấu &"
+          aria-label="Chỉ nhập chữ in hoa (A-Z), số (0-9) và dấu &"
         />
       </div>
       {tableData.length > 0 && duplicateRows.length == 0 && (
