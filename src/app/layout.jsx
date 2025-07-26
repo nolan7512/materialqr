@@ -55,11 +55,11 @@ export default function RootLayout({ children }) {
                 Apache Footwear VIETNAM
               </label>
             </div>
-            <div className="flex justify-center items-center  mb-6">
+            <div className="flex justify-center items-center  ">
               <h2
                 className="text-3xl font-extrabold uppercase px-6 rounded-xl tracking-wider
     bg-gradient-to-r from-blue-500 via-blue-400 to-blue-600 text-transparent bg-clip-text 
-    drop-shadow-lg border-b-4 border-blue-700 animate-fade-down text-center mb-6 inline-block">
+    drop-shadow-lg border-b-4 border-blue-700 animate-fade-down text-center inline-block">
                 Material QR Management System
               </h2>
             </div>

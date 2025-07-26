@@ -20,7 +20,7 @@ export default function ScanQRPage() {
   const [isIOS, setIsIOS] = useState(false);
 
   const [showModal, setShowModal] = useState(false);
-
+  const showModalRef = useRef(false);
   //   useEffect(() => {
   //   if ('serviceWorker' in navigator) {
   //     navigator.serviceWorker
@@ -29,12 +29,20 @@ export default function ScanQRPage() {
   //       .catch((err) => console.error('Service Worker registration failed:', err));
   //   }
   // }, []);
-
+  useEffect(() => {
+    showModalRef.current = showModal;
+  }, [showModal]);
+  useEffect(() => {
+    if (!showModal && !isScanning) {
+      setIsScanning(true);
+      setResult(null);
+    }
+  }, [showModal]);
   useEffect(() => {
     setIsScanning(true);
     const scanner = new Html5QrcodeScanner('qr-reader', {
       fps: 10,
-      qrbox: { width: 250, height: 250 },
+      qrbox: { width: 300, height: 300 },
       rememberLastUsedCamera: true,
       supportedScanTypes: [0], // SCAN_TYPE_CAMERA
     });
@@ -44,8 +52,10 @@ export default function ScanQRPage() {
     scanner.render(
       async (decodedText) => {
         try {
+          if (showModalRef.current) return; // ✅ luôn đúng với trạng thái hiện tại
           setResult(decodedText);
           setIsScanning(false);
+
           // Bỏ comment khi API sẵn sàng
 
           const res = await fetch(`/api/materialqr/${decodedText}`);
@@ -170,12 +180,12 @@ export default function ScanQRPage() {
   };
   return (
     <div className="p-4 max-w-2xl mx-auto">
-      <div className="py-2">
+      <div className="py-2 pb-15">
         <button
           className="flex px-4 py-2 rounded items-center gap-2 bg-[var(--button-bg)] text-[var(--button-text)] hover:bg-[var(--button-hover-bg)]"
           onClick={() => router.push("/")}
         >
-          Quay lại
+          Back
         </button>
         {/* {deferredPrompt && !isIOS && (
           <button
@@ -191,50 +201,11 @@ export default function ScanQRPage() {
           </p>
         )} */}
       </div>
-      <h1 className="text-lg font-bold mb-4 text-center">Quét mã QR Nguyên Vật Liệu</h1>
 
-      <div className="mb-6">
-        <p className="text-sm text-[var(--font-color)] mb-2">
-          Để sử dụng camera mà không có cảnh báo bảo mật, bạn cần cài đặt chứng chỉ.
-          <button
-            onClick={() => setShowInstructions(!showInstructions)}
-            className="ml-2 text-blue-600 hover:underline"
-          >
-            {showInstructions ? 'Ẩn hướng dẫn' : 'Xem hướng dẫn cài đặt'}
-          </button>
-        </p>
-        {showInstructions && (
-          <div className="bg-[var(--border-color)] p-4 rounded-lg mb-4 text-[var(--font-color)]">
-            <div className="text-sm">
-              1. Nhấn nút dưới để tải chứng chỉ (<code>cert.cer</code>).<br />
-              2. Cài đặt chứng chỉ:
-              <ul className="list-disc pl-5">
-                <li>
-                  <strong>Windows</strong>: Nhấp đúp vào <code>cert.cer</code>, chọn "Install Certificate", chọn "Local Machine", đặt vào "Trusted Root Certification Authorities".
-                </li>
-                <li>
-                  <strong>macOS</strong>: Mở Keychain Access, kéo tệp vào, chọn "System", đặt "Always Trust".
-                </li>
-                <li>
-                  <strong>iOS</strong>: Mở tệp, vào Cài đặt , Chung  , Quản lý cấu hình & thiết bị, cài đặt chứng chỉ.
-                </li>
-                <li>
-                  <strong>Android</strong>: Mở tệp, vào Cài đặt ,  Bảo mật , Cài đặt chứng chỉ từ bộ nhớ.
-                </li>
-              </ul>
-              3. Làm mới trang để sử dụng camera.
-            </div>
-            <a
-              href="/certs/10.30.3.40.cer"
-              download="cert.cer"
-              className="mt-2 inline-block bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-            >
-              Tải Chứng chỉ
-            </a>
-          </div>
-        )}
-      </div>
-      <div className="mb-4">
+      {/* <h1 className="text-lg font-bold mb-4 text-center">Scan QR Code of Materials</h1> */}
+
+
+      {/* <div className="mb-4">
         <label className="block text-sm text-[var(--font-color)] mb-2">
           Cấp quyền Camera Hoặc tải ảnh QR lên ở đây:
           <input
@@ -245,21 +216,84 @@ export default function ScanQRPage() {
             className="mt-2 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
           />
         </label>
-      </div>
+      </div> */}
       {isScanning && (
-        <p className="text-center text-[var(--font-color)] animate-pulse">Bấm "Request Carema Permissions" hoặc "Start Scanning" phía dưới để bắt đầu...</p>
+        <p className="text-center text-[var(--font-color)] animate-pulse">Click "Request Camera Permissions" or "Start Scanning" below to begin...</p>
       )}
 
-      <div id="qr-reader" className=" max-w-full mx-auto mb-6 border rounded-lg shadow-md" />
+      <div id="qr-reader"
+        className=" min-w-[200px] min-h-[100px] w-full max-w-2xl mx-auto mb-6 border rounded-lg  bg-gray-800
+      shadow-md text-[var(--button-text)] 
+      [&_span:not([style])]:block
+      [&_span:not([style])>button]:bg-[var(--button-bg)] 
+      [&_span:not([style])>button]:!w-[300px]  
+      [&_span:not([style])>button]:!h-[40px] 
+      [&_span:not([style])>button]:rounded-lg
+      [&_span:not([style])>button]:mt-5 
+      [&_#html5-qrcode-button-camera-permission]:w-[300px]   
+      [&_#html5-qrcode-button-camera-permission]:bg-[var(--button-bg)]  
+      [&_#html5-qrcode-button-camera-permission]:!h-[40px]
+      [&_#html5-qrcode-button-camera-permission]:rounded-lg
+      [&_select]:!bg-[var(--button-bg)]
+      [&_select]:rounded-md
+      [&_select]:!h-[40px]
+      ">
+      </div>
 
       {error && (
         <p className="text-red-500 text-center mt-4">{error}</p>
       )}
 
       {result && !material && !error && (
-        <p className="text-center mt-4">Mã QR: {result}</p>
+        <p className="text-center mt-4">QR: {result}</p>
       )}
-
+      <div className="mb-6">
+        <p className="text-sm text-[var(--font-color)] mb-2">
+          To use the camera without security warnings, requiring re-authorization every session you need to install the certificate.
+          <button
+            onClick={() => setShowInstructions(!showInstructions)}
+            className="ml-2 text-blue-600 hover:underline"
+          >
+            {showInstructions ? 'Hide instructions' : 'See installation instructions'}
+          </button>
+        </p>
+        {showInstructions && (
+          <div className="bg-[var(--border-color)] p-4 rounded-lg mb-4 text-[var(--font-color)]">
+            <div className="text-sm">
+              1. Click the button below to download the certificate (<code>cert.cer</code>).<br />
+              2. Install certificate:
+              <ul className="list-disc pl-5">
+                <li>
+                  <strong>Windows</strong>: Double click <code>cert.cer</code>, select "Install Certificate", select "Local Machine", set to "Trusted Root Certification Authorities".
+                </li>
+                <li>
+                  <strong>macOS</strong>: Open Keychain Access, drag the file in, select "System", set "Always Trust".
+                </li>
+                <li>
+                  <strong>iOS</strong>: When you open the .cer file, you will see the “Review Profile” interface.
+                  Tap “Install” in the upper right corner.
+                  Enter your passcode if prompted.
+                  Continue to tap “Install” → “Done”.
+                  Go to Settings - General - About - Certificate Trust Settings.
+                  Under "Enable all root certificates," turn on the switch next to the certificate you just installed (usually the name of the file).
+                  Confirm Trust when prompted.
+                </li>
+                <li>
+                  <strong>Android</strong>: Open the file, go to Settings , Security , Install certificate from storage.
+                </li>
+              </ul>
+              3. Refresh the page to use the camera.
+            </div>
+            <a
+              href="/certs/10.30.3.40.cer"
+              download="cert.cer"
+              className="mt-2 inline-block bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+            >
+              Download Certificate
+            </a>
+          </div>
+        )}
+      </div>
       {/* {material && (
         <div className="mt-6 overflow-x-auto max-h-[70vh] overflow-y-auto border rounded-lg p-4 bg-white shadow">
           <table className="min-w-full text-sm">

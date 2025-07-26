@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import * as XLSX from "xlsx";
@@ -49,24 +49,29 @@ export default function SearchPage() {
   const printRef = useRef();
   const [selectedMaterial, setSelectedMaterial] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [sortConfig, setSortConfig] = useState({
+    key: null,
+    direction: 'normal', // 'normal' | 'asc' | 'desc'
+  });
+
+  async function fetchData() {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/materialqr");
+      if (!res.ok) throw new Error("Lỗi khi lấy dữ liệu");
+      const json = await res.json();
+      setData(json);
+      setFilteredData(json);
+    } catch (error) {
+      console.error(error);
+      setData([]);
+      setFilteredData([]);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
-    async function fetchData() {
-      setLoading(true);
-      try {
-        const res = await fetch("/api/materialqr");
-        if (!res.ok) throw new Error("Lỗi khi lấy dữ liệu");
-        const json = await res.json();
-        setData(json);
-        setFilteredData(json);
-      } catch (error) {
-        console.error(error);
-        setData([]);
-        setFilteredData([]);
-      } finally {
-        setLoading(false);
-      }
-    }
     fetchData();
   }, []);
 
@@ -79,10 +84,45 @@ export default function SearchPage() {
           (item) =>
             item.Ref_num?.toLowerCase().includes(searchTerm.toLowerCase())
             || item.Season?.toLowerCase().includes(searchTerm.toLowerCase())
+            || item.Supplier_Name?.toLowerCase().includes(searchTerm.toLowerCase())
         )
       );
     }
   }, [searchTerm, data]);
+
+  const sortedData = useMemo(() => {
+    if (sortConfig.key && sortConfig.direction !== 'normal') {
+      const sorted = [...filteredData].sort((a, b) => {
+        const valA = a[sortConfig.key]?.toString().toLowerCase() || '';
+        const valB = b[sortConfig.key]?.toString().toLowerCase() || '';
+
+        if (valA < valB) return sortConfig.direction === 'asc' ? -1 : 1;
+        if (valA > valB) return sortConfig.direction === 'asc' ? 1 : -1;
+        return 0;
+      });
+      return sorted;
+    }
+    return filteredData;
+  }, [filteredData, sortConfig]);
+
+  const handleSort = (key) => {
+    setSortConfig((prev) => {
+      if (prev.key !== key) {
+        return { key, direction: 'asc' }; // bắt đầu từ A-Z
+      }
+
+      if (prev.direction === 'asc') {
+        return { key, direction: 'desc' }; // sau đó Z-A
+      }
+
+      if (prev.direction === 'desc') {
+        return { key: null, direction: 'normal' }; // trở lại mặc định
+      }
+
+      return { key, direction: 'asc' };
+    });
+  };
+
   const handleEdit = async (id) => {
     try {
       const res = await fetch(`/api/materialqr/${id}`);
@@ -126,12 +166,19 @@ export default function SearchPage() {
   };
 
   const handleSelectAll = () => {
-    if (selectedRows.length === filteredData.length) {
-      setSelectedRows([]);
+    const currentIds = sortedData.map((item) => item.id);
+    const isAllSelected = currentIds.every(id => selectedRows.includes(id));
+
+    if (isAllSelected) {
+      // Bỏ chọn chỉ những hàng đang hiển thị
+      setSelectedRows(prev => prev.filter(id => !currentIds.includes(id)));
     } else {
-      setSelectedRows(filteredData.map((item) => item.id));
+      // Thêm tất cả hàng đang hiển thị
+      const newSelection = Array.from(new Set([...selectedRows, ...currentIds]));
+      setSelectedRows(newSelection);
     }
   };
+
 
   const handleExport = async () => {
     try {
@@ -153,7 +200,7 @@ export default function SearchPage() {
         }
       }
 
-      const exportData = data
+      const exportData = sortedData
         .filter((row) => selectedRows.includes(row.id))
         .map((row) => {
           const entries = Object.entries(row).filter(([key]) => key !== "id");
@@ -222,6 +269,33 @@ export default function SearchPage() {
 
   const columnKeys = data.length > 0 ? Object.keys(data[0]).filter((key) => key !== "id") : [];
 
+
+  const handleDelete = async () => {
+    if (selectedRows.length === 0) {
+      alert("Vui lòng chọn ít nhất một hàng để xóa.");
+      return;
+    }
+
+    const confirmDelete = window.confirm(`Bạn có chắc chắn muốn xóa ${selectedRows.length} hàng đã chọn?`);
+    if (!confirmDelete) return;
+    try {
+      const res = await fetch("/api/materialqr", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ids: selectedRows }),
+      });
+      if (!res.ok) throw new Error("Xóa không thành công");
+      const result = await res.json();
+      if (result.success) {
+        fetchData();
+        setSelectedRows([]);
+        alert("Xóa thành công");
+      }
+    } catch (err) {
+      alert("Xóa thất bại: " + err.message);
+    }
+  };
+
   const handlePrint = () => {
     if (!printRef.current) return;
 
@@ -233,17 +307,19 @@ export default function SearchPage() {
         <head>
           <style>
             @page {
-              size: 6cm 3cm;
-              margin: 0;
+              // size: 5.9cm 3cm;
+              // // size: 3cm 6cm; /* Chiều dọc */
+              // margin: 0;
             }
 
             body {
               margin-top: 0;
               font-family: sans-serif;
+              overflow: hidden;
             }
 
             .label {
-              width: 6.0cm;
+              width: 5.9cm;
               height: 3.0cm;
               box-sizing: border-box;
               padding: 0.1cm;
@@ -295,28 +371,35 @@ export default function SearchPage() {
           className="bg-[var(--button-bg)] text-[var(--button-text)] hover:bg-[var(--button-hover-bg)] px-4 py-2 rounded "
           onClick={() => router.push("/")}
         >
-          Quay lại
+          Back
         </button>
         <button
-          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 disabled:opacity-50"
+          className="bg-green-600 text-[var(--button-text)] px-4 py-2 rounded hover:bg-green-700 disabled:opacity-50"
           onClick={handleExport}
           disabled={selectedRows.length === 0}
         >
           Export Excel
         </button>
         <button
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+          className="bg-blue-600 text-[var(--button-text)] px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
           onClick={handlePrint}
           disabled={selectedRows.length === 0}
         >
           Print
+        </button>
+        <button
+          className="bg-red-500 text-[var(--button-text)] px-4 py-2 rounded hover:bg-red-700 disabled:opacity-50"
+          onClick={handleDelete}
+          disabled={selectedRows.length === 0}
+        >
+          Delete
         </button>
       </div>
 
       <div className="pt-2">
         <input
           type="text"
-          placeholder="Tìm kiếm theo Ref_num / Season..."
+          placeholder="Search by Ref_num / Season / Supplier_Name..."
           className="mb-4 px-3 py-2 border rounded w-full max-w-lg"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -325,7 +408,7 @@ export default function SearchPage() {
 
 
       {loading ? (
-        <p>Đang tải dữ liệu...</p>
+        <p>Loading...</p>
       ) : (
         <div className=" mt-4 overflow-x-auto overflow-y-auto max-h-[55vh]">
           <table className="min-w-max border-separate border-spacing-0 w-full">
@@ -335,7 +418,10 @@ export default function SearchPage() {
                   <div className="flex items-center justify-center">
                     <input
                       type="checkbox"
-                      checked={selectedRows.length === filteredData.length && filteredData.length > 0}
+                      checked={
+                        sortedData.length > 0 &&
+                        sortedData.every((item) => selectedRows.includes(item.id))
+                      }
                       onChange={handleSelectAll}
                     />
                   </div>
@@ -362,15 +448,27 @@ export default function SearchPage() {
 
                 </th>
                 {columnTable.map((key) => (
-                  <th key={key} className="border border-[var(--border-color)] bg-[var(--background)]  px-2 py-1 text-left  whitespace-nowrap min-w-[150px]">
-                    {key}
+                  <th
+                    key={key}
+                    onClick={() => key === 'Supplier_Name' && handleSort(key)}
+                    className="cursor-pointer border border-[var(--border-color)] bg-[var(--background)] px-2 py-1 text-left whitespace-nowrap min-w-[150px] select-none"
+                  >
+                    <div className="flex items-center gap-1">
+                      {key}
+                      {key === 'Supplier_Name' && (
+                        <span>                         
+                          {sortConfig.direction === 'asc' && sortConfig.key === 'Supplier_Name' && <svg width="25px" height="25px" viewBox="0 0 32 32" className="icon" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M25.333 22V3.333h-2.667V22h-4L24 28.667 29.333 22z" fill="#546E7A" /><path d="M11.2 11.467H7.667l-0.733 2H4.6l3.8 -10.133h1.933l3.8 10.133H12zm-3.067 -1.8h2.533l-1.267 -3.8zM8.267 27h5.067v1.667H5.6V27.4l5.067 -7.2H5.6v-1.667h7.6v1.133z" fill="#2196F3" /></svg>}
+                          {sortConfig.direction === 'desc' && sortConfig.key === 'Supplier_Name' && <svg width="25px" height="25px" viewBox="0 0 32 32" className="icon" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M11.2 26.667H7.667l-0.733 2H4.6l3.8 -10.133h1.933l3.733 10.133h-2.133zm-3.067 -1.8h2.533l-1.267 -3.8zm0.133 -13.067h5.067v1.667H5.6V12.2L10.667 5H5.6v-1.667h7.6v1.133z" fill="#2196F3" /><path d="M25.333 22V3.333h-2.667V22h-4L24 28.667 29.333 22z" fill="#546E7A" /></svg>}
+                        </span>
+                      )}
+                    </div>
                   </th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              {filteredData.length > 0 ? (
-                filteredData.map((item) => (
+              {sortedData.length > 0 ? (
+                sortedData.map((item) => (
                   <tr key={item.id}>
                     <td className="border border-[var(--border-color)] p-2 text-center">
                       <input
@@ -388,7 +486,7 @@ export default function SearchPage() {
                             <path d="M25.876 10.926c-2.918 -2.918 -6.799 -4.526 -10.926 -4.526S6.943 8.007 4.024 10.926L0 14.95l4.124 4.124c2.918 2.918 6.799 4.526 10.926 4.526s8.008 -1.607 10.926 -4.526l4.024 -4.024zm-0.617 7.431c-2.727 2.727 -6.353 4.229 -10.209 4.229s-7.482 -1.502 -10.209 -4.229l-3.407 -3.407 3.308 -3.308c2.727 -2.727 6.353 -4.229 10.209 -4.229s7.482 1.502 10.209 4.229l3.407 3.407z" />
                             <path d="M14.986 8.397c-3.632 0 -6.588 2.955 -6.588 6.588s2.955 6.588 6.588 6.588 6.588 -2.955 6.588 -6.588 -2.955 -6.588 -6.588 -6.588m0 4.054c-1.397 0 -2.534 1.137 -2.534 2.534a0.507 0.507 0 0 1 -1.014 0c0 -1.956 1.591 -3.547 3.547 -3.547a0.507 0.507 0 0 1 0 1.014" />
                           </svg>
-                          <p className="text-sm text-nowrap">Xem chi tiết</p>
+                          <p className="text-sm text-nowrap">View details</p>
                         </button>
                         {/* Đường chia */}
                         <div className="h-6 w-px bg-gray-300" />
@@ -398,7 +496,7 @@ export default function SearchPage() {
                           className="text-green-600 hover:underline text-sm flex items-center gap-1"
                         >
                           ✎
-                          <span>Sửa</span>
+                          <span>Edit</span>
                         </button>
                       </div>
                     </td>
@@ -416,7 +514,7 @@ export default function SearchPage() {
               ) : (
                 <tr>
                   <td colSpan={columnKeys.length + 2} className="text-center p-4">
-                    Không có kết quả
+                    No results
                   </td>
                 </tr>
               )}

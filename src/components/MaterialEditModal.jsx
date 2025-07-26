@@ -50,7 +50,7 @@ export default function MaterialEditModal({ isOpen, onClose, data, onSave }) {
                 <div className="fixed inset-0 bg-black opacity-30" aria-hidden="true" />
 
                 <DialogPanel className="bg-[var(--background)] text-[var(--font-color)] relative  rounded-lg max-h-[80vh] w-full max-w-5xl overflow-y-auto p-6 shadow-xl">
-                    <DialogTitle className="text-3xl font-bold mb-4 text-center text-[var(--accent-color)]">Chỉnh sửa vật liệu</DialogTitle>
+                    <DialogTitle className="text-3xl font-bold mb-4 text-center text-[var(--accent-color)]">Edit Material</DialogTitle>
 
                     <div className="space-y-2">
                         {Object.entries(formData).map(([key, value]) => {
@@ -101,10 +101,10 @@ export default function MaterialEditModal({ isOpen, onClose, data, onSave }) {
 
                     <div className="mt-6 flex justify-end gap-2">
                         <button onClick={onClose} className="bg-red-500 text-[var(--button-text)] px-4 py-2 rounded hover:bg-red-600">
-                            Hủy
+                            Cancel
                         </button>
                         <button onClick={handleSubmit} className="bg-[var(--button-bg)] text-[var(--button-text)] px-4 py-2 rounded hover:bg-[var(--button-hover-bg)]">
-                            Lưu
+                            Save
                         </button>
                     </div>
                 </DialogPanel>

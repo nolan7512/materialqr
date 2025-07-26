@@ -19,7 +19,7 @@ export default function MaterialInfoModal({ isOpen, onClose, data }) {
 
                 <DialogPanel className="relative rounded-lg max-h-[80vh] w-full max-w-5xl overflow-y-auto p-6 shadow-xl bg-[var(--background)] text-[var(--font-color)]">
                     <DialogTitle className="flex text-3xl font-bold mb-4 items-center justify-center text-[var(--accent-color)]">
-                        Thông tin vật liệu
+                        Material Information
                     </DialogTitle>
 
                     {/* Ảnh vật liệu */}
@@ -46,7 +46,7 @@ export default function MaterialInfoModal({ isOpen, onClose, data }) {
                                 );
                             })
                         ) : (
-                            <p className="text-center text-gray-500">Không có dữ liệu để hiển thị</p>
+                            <p className="text-center text-gray-500">No data to display</p>
                         )}
                     </div>
 
@@ -56,7 +56,7 @@ export default function MaterialInfoModal({ isOpen, onClose, data }) {
                             onClick={onClose}
                             className="bg-[var(--button-bg)] text-[var(--button-text)] px-4 py-2 rounded hover:bg-[var(--button-hover-bg)]"
                         >
-                            Đóng
+                            Close
                         </button>
                     </div>
                 </DialogPanel>
